@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>فێربوونا تورکی</title>
+<style>
+:root{--bg:#fff;--card:#fff;--tx:#3c3c3c;--mut:#8a8a8a;--g:#58cc02;--gd:#46a302;--bl:#1cb0f6;--bld:#1899d6;--rd:#ff4b4b;--rdd:#ea2b2b;--or:#ff9600;--bd:#e5e5e5;--gl:#d7ffb8;--rl:#ffdfe0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#131f24;--card:#131f24;--tx:#f1f7fb;--mut:#8b9aa3;--bd:#37464f;--gl:#1f3b1a;--rl:#3d1f22;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#131f24;--card:#131f24;--tx:#f1f7fb;--mut:#8b9aa3;--bd:#37464f;--gl:#1f3b1a;--rl:#3d1f22;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}
+.wrap{max-width:480px;margin:0 auto;padding:14px 16px 24px;min-height:100vh}
+.hide{display:none!important}
+.btn.sm{font-size:14px;padding:10px;border:2px solid var(--bd);background:var(--card);color:var(--tx);box-shadow:none}
+.row{display:flex;justify-content:space-between;padding:10px 4px;border-bottom:1px solid var(--bd);font-weight:700}
+.stats{display:flex;justify-content:space-between;font-weight:700;font-size:18px;padding:6px 4px 14px}
+.daily{background:var(--bl);color:#fff;border-radius:18px;padding:16px;margin-bottom:22px;box-shadow:0 4px 0 var(--bld)}
+.daily h2{margin:0 0 4px;font-size:19px}.daily p{margin:0 0 12px;font-size:14px;opacity:.95}
+.goal{height:12px;background:rgba(255,255,255,.35);border-radius:9px;overflow:hidden;margin-bottom:12px}
+.goal i{display:block;height:100%;background:#fff;border-radius:9px}
+.btn{display:block;width:100%;border:0;border-radius:14px;padding:14px;font-weight:800;font-size:17px;background:var(--g);color:#fff;box-shadow:0 4px 0 var(--gd)}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--gd)}
+.btn.w{background:#fff;color:var(--bld);box-shadow:0 4px 0 #cfe9f7}
+.btn[disabled]{background:var(--bd);color:var(--mut);box-shadow:none}
+.btn.r{background:var(--rd);box-shadow:0 4px 0 var(--rdd)}
+.unit{text-align:center;margin:8px 0 4px;font-weight:800;color:var(--mut)}
+.path{display:flex;flex-direction:column;align-items:center;gap:18px;padding:10px 0 30px}
+.node{width:78px;height:78px;border-radius:50%;border:0;font-size:32px;background:var(--bd);box-shadow:0 6px 0 #c4c4c4;position:relative}
+.node.cur{background:var(--g);box-shadow:0 6px 0 var(--gd);animation:pop 1.4s infinite}
+.node.done{background:var(--or);box-shadow:0 6px 0 #d57f00}
+.node.lock{opacity:.6}
+.node small{position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);font-size:13px;color:var(--tx);font-weight:700;white-space:nowrap}
+@keyframes pop{50%{transform:scale(1.07)}}
+#lesson{display:flex;flex-direction:column;min-height:100vh;max-width:480px;margin:0 auto;padding:14px 16px 0}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.x{background:none;border:0;font-size:24px;color:var(--mut)}
+.pb{flex:1;height:16px;background:var(--bd);border-radius:9px;overflow:hidden}
+.pb i{display:block;height:100%;width:0;background:var(--g);border-radius:9px;transition:width .3s}
+.q{flex:1}
+.q h3{font-size:22px;margin:0 0 18px}
+.big{display:flex;align-items:center;gap:12px;font-size:32px;font-weight:800;direction:ltr;justify-content:center;margin:10px 0 24px}
+.spk{border:0;background:var(--bl);color:#fff;border-radius:14px;width:54px;height:54px;font-size:24px;box-shadow:0 4px 0 var(--bld)}
+.opts{display:grid;gap:10px}
+.opt{border:2px solid var(--bd);border-radius:14px;background:var(--card);padding:14px;font-size:20px;font-weight:700;box-shadow:0 3px 0 var(--bd)}
+.opt.sel{border-color:var(--bl);background:rgba(28,176,246,.12);color:var(--bl)}
+.opt.ok{border-color:var(--g);background:var(--gl)}
+.opt.no{border-color:var(--rd);background:var(--rl)}
+.opt.gone{visibility:hidden}
+.mt{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mt div{display:grid;gap:10px;align-content:start}
+.foot{margin:0 -16px;padding:16px 16px 12px;border-top:2px solid var(--bd)}
+.foot.ok{background:var(--gl)}.foot.no{background:var(--rl)}
+.fb{font-weight:800;font-size:19px;margin-bottom:12px}
+.foot.ok .fb{color:var(--gd)}.foot.no .fb{color:var(--rdd)}
+.center{text-align:center;padding-top:70px}
+.center .em{font-size:80px}.center h2{font-size:26px;margin:10px 0}
+.res{display:flex;gap:12px;justify-content:center;margin:22px 0 30px}
+.res div{border:2px solid var(--or);border-radius:14px;padding:10px 18px;font-weight:800;font-size:20px;color:var(--or)}
+.shake{animation:sh .3s}@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.toast{position:fixed;left:16px;right:16px;bottom:calc(90px + env(safe-area-inset-bottom,0px));max-width:448px;margin:0 auto;background:#333;color:#fff;padding:12px 16px;border-radius:14px;font-size:15px;z-index:20;text-align:center}
+</style>
+</head>
+<body>
+<div id="home" class="wrap">
+  <div class="stats"><span id="sSt">🔥 0</span><span id="sXp">⭐ 0</span><span>🇹🇷 تورکی</span></div>
+  <div style="display:flex;gap:8px;margin-bottom:14px"><button class="btn sm" id="lg">🔐 چوونەژوور ب Google</button><button class="btn sm" id="lb" style="width:auto">🏆 پێشەنگ</button></div>
+  <div class="daily">
+    <h2>وانەیا ڕۆژانە 📅</h2>
+    <p id="dTxt"></p>
+    <div class="goal"><i id="dBar"></i></div>
+    <button class="btn w" id="dBtn">دەستپێبکە</button>
+  </div>
+  <div id="path"></div>
+</div>
+
+<div id="lesson" class="hide">
+  <div class="top"><button class="x" id="xBtn">✕</button><div class="pb"><i id="pb"></i></div><span id="hr" style="font-weight:800;color:var(--rd)">❤️ 3</span></div>
+  <div class="q" id="qa"></div>
+  <div class="foot" id="foot"><div class="fb hide" id="fb"></div><button class="btn" id="mainBtn" disabled>پشتڕاست بکە</button></div>
+</div>
+
+<div id="done" class="wrap hide"></div>
+<div id="toast" class="toast hide"></div>
+
+<script>
+const U=[
+{n:"سلاڤکرن",e:"👋",w:[["Merhaba","سلاڤ"],["Günaydın","سەحەرا تە خێر"],["İyi akşamlar","ئێڤارا تە خێر"],["Teşekkürler","سوپاس"],["Lütfen","تکایە"],["Evet","بەلێ"],["Hayır","نەخێر"],["Hoşça kal","مالئاڤا"]]},
+{n:"ژمارە",e:"🔢",w:[["Bir","یەک"],["İki","دوو"],["Üç","سێ"],["Dört","چوار"],["Beş","پێنج"],["Altı","شەش"],["Yedi","حەفت"],["Sekiz","هەشت"]]},
+{n:"ڕەنگ",e:"🎨",w:[["Kırmızı","سۆر"],["Mavi","شین"],["Yeşil","کەسک"],["Sarı","زەر"],["Beyaz","سپی"],["Siyah","ڕەش"]]},
+{n:"خوارن",e:"🍎",w:[["Su","ئاڤ"],["Ekmek","نان"],["Süt","شیر"],["Elma","سێڤ"],["Çay","چا"],["Et","گۆشت"]]},
+{n:"خێزان",e:"👨‍👩‍👧",w:[["Anne","دایک"],["Baba","باب"],["Abla","خوشکا مەزن"],["Ağabey","برایێ مەزن"],["Çocuk","زارۆک"],["Arkadaş","هەڤال"]]},
+{n:"ئاژەل",e:"🐴",w:[["Kedi","پشیک"],["Köpek","سەگ"],["At","ئەسپ"],["Kuş","بالندە"],["Balık","ماسی"],["İnek","گا"]]}
+];
+const ALL=[].concat(...U.map(u=>u.w));
+const $=id=>document.getElementById(id);
+const shuf=a=>[...a].sort(()=>Math.random()-.5);
+const day=(o=0)=>{const d=new Date();d.setDate(d.getDate()+o);return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()};
+let S={xp:0,streak:0,last:"",done:{},today:{d:"",xp:0,daily:false}};
+try{const r=localStorage.getItem("trDuo");if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const save=()=>{try{localStorage.setItem("trDuo",JSON.stringify(S))}catch(e){}try{window.FB&&FB.save(S)}catch(e){}};
+if(S.today.d!==day())S.today={d:day(),xp:0,daily:false};
+const GOAL=30;
+
+let voices=[],tt;
+function toast(m){const el=$("toast");el.textContent=m;el.classList.remove("hide");clearTimeout(tt);tt=setTimeout(()=>el.classList.add("hide"),4500)}
+try{voices=speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=()=>{voices=speechSynthesis.getVoices()}}catch(e){}
+function speak(t){
+  if(!("speechSynthesis" in window)){toast("ئەڤ وێبگەڕە پشتگیریا دەنگی ناکەت. وێبگەڕەکا دی (Chrome یان Safari) بکاربینە.");return}
+  try{
+    voices=speechSynthesis.getVoices();
+    const u=new SpeechSynthesisUtterance(t);u.lang="tr-TR";u.rate=.85;u.volume=1;
+    const v=voices.find(x=>/^tr[-_]/i.test(x.lang));
+    if(v)u.voice=v;else if(voices.length)toast("دەنگێ تورکی د ئامێرێ تە دا نینە. ژ ڕێکخستنێن ئامێری > زمان/دەنگ دەنگێ تورکی دابەزینە.");
+    speechSynthesis.cancel();speechSynthesis.resume();
+    setTimeout(()=>speechSynthesis.speak(u),60);
+  }catch(e){toast("دەنگ کار ناکەت د ڤی ئامێری دا.")}
+}
+
+function home(){
+  $("home").classList.remove("hide");$("lesson").classList.add("hide");$("done").classList.add("hide");
+  $("sSt").textContent="🔥 "+S.streak;$("sXp").textContent="⭐ "+S.xp;
+  $("dBar").style.width=Math.min(100,S.today.xp/GOAL*100)+"%";
+  $("dTxt").textContent=S.today.daily?"ئافەرین! وانەیا ئەڤرۆ تە ب دووماهی ئینا ✅":"ئامانجا ئەڤرۆ: "+S.today.xp+" / "+GOAL+" XP";
+  $("dBtn").textContent=S.today.daily?"دیسا ڕاهێنان بکە":"دەستپێبکە";
+  const p=$("path");p.innerHTML="";
+  let cur=U.findIndex((u,i)=>!S.done[i]);if(cur<0)cur=-1;
+  U.forEach((u,i)=>{
+    const wrap=document.createElement("div");wrap.className="path";wrap.style.padding="0";
+    const b=document.createElement("button");
+    const st=S.done[i]?"done":(i===cur?"cur":(cur===-1?"done":"lock"));
+    b.className="node "+st;b.innerHTML=(st==="done"?"⭐":(st==="lock"?"🔒":u.e))+"<small>"+u.n+"</small>";
+    b.style.marginInlineStart=(Math.sin(i*1.2)*50)+"px";b.style.marginBottom="26px";
+    b.onclick=()=>{if(st!=="lock")start(u.w,i,10)};
+    wrap.appendChild(b);p.appendChild(wrap);
+  });
+}
+
+function dailyWords(){
+  const n=Math.floor(Date.now()/864e5);let a=ALL.map((w,i)=>[(i*7919+n*104729)%1000,w]).sort((x,y)=>x[0]-y[0]);
+  return a.slice(0,6).map(x=>x[1]);
+}
+$("dBtn").onclick=()=>start(dailyWords(),-1,15);
+
+let L;
+function build(words){
+  const ex=[];
+  words.forEach(w=>{ex.push({t:Math.floor(Math.random()*3),w})});
+  ex.splice(Math.floor(ex.length/2),0,{t:3,ws:shuf(words).slice(0,4)});
+  return ex;
+}
+function start(words,unit,xp){
+  L={unit,xp,ex:build(words),i:0,total:0,ok:0,hearts:3,sel:null,phase:"check",words};
+  L.total=L.ex.length;
+  $("home").classList.add("hide");$("done").classList.add("hide");$("lesson").classList.remove("hide");
+  show();
+}
+$("xBtn").onclick=()=>{if(confirm("تو دێ ژ وانێ دەرکەڤی؟"))home()};
+
+function opts(e){
+  const w=e.w,fromTr=e.t===1?false:true; // t1: ku->tr
+  const idx=e.t===1?0:1;
+  const wrong=shuf(ALL.filter(x=>x[idx]!==w[idx])).slice(0,3).map(x=>x[idx]);
+  return shuf([w[idx],...wrong]);
+}
+function show(){
+  const e=L.ex[L.i];L.sel=null;L.phase="check";
+  $("hr").textContent="❤️ "+L.hearts;
+  $("pb").style.width=(L.ok/L.total*100)+"%";
+  const f=$("foot");f.className="foot";$("fb").classList.add("hide");
+  const mb=$("mainBtn");mb.className="btn";mb.disabled=true;mb.textContent="پشتڕاست بکە";
+  const qa=$("qa");qa.innerHTML="";
+  if(e.t===3){
+    qa.innerHTML='<h3>جووتان ببەستە</h3><div class="mt"><div id="cL"></div><div id="cR"></div></div>';
+    let sel=null,left=e.ws.length;
+    const mk=(par,txt,key,side)=>{const b=document.createElement("button");b.className="opt";b.textContent=txt;b.dataset.k=key;b.dataset.s=side;par.appendChild(b);
+      b.onclick=()=>{
+        if(side==="tr")speak(txt);
+        const same=document.querySelector('.opt.sel[data-s="'+side+'"]');if(same)same.classList.remove("sel");
+        const o=document.querySelector('.opt.sel');
+        if(o&&o.dataset.s!==side){
+          const ok=o.dataset.k===key;
+          if(ok){o.classList.add("ok");b.classList.add("ok");o.classList.remove("sel");o.disabled=b.disabled=true;
+            setTimeout(()=>{o.classList.add("gone");b.classList.add("gone")},350);
+            if(--left===0){e.matched=true;finish(true,"")}}
+          else{o.classList.remove("sel");[o,b].forEach(x=>x.classList.add("no"));setTimeout(()=>[o,b].forEach(x=>x.classList.remove("no")),450);hurt()}
+        }else b.classList.add("sel");
+      }};
+    shuf(e.ws).forEach(w=>mk($("cL"),w[0],w[0],"tr"));
+    shuf(e.ws).forEach(w=>mk($("cR"),w[1],w[0],"ku"));
+    return;
+  }
+  const w=e.w;
+  if(e.t===0)qa.innerHTML='<h3>ئەڤە ب کوردی چیە؟</h3><div class="big">'+w[0]+'</div>';
+  if(e.t===1)qa.innerHTML='<h3>ئەڤە ب تورکی چیە؟</h3><div class="big" style="direction:rtl">'+w[1]+'</div>';
+  if(e.t===2){qa.innerHTML='<h3>گوهدار بە و مانایێ هەلبژێرە</h3><div class="big"><button class="spk" id="sp">🔊</button></div>';$("sp").onclick=()=>speak(w[0]);speak(w[0])}
+  if(e.t===0)speak(w[0]);
+  const box=document.createElement("div");box.className="opts";
+  const ans=e.t===1?w[0]:w[1];
+  opts(e).forEach(o=>{const b=document.createElement("button");b.className="opt";b.textContent=o;
+    b.onclick=()=>{if(L.phase!=="check")return;[...box.children].forEach(x=>x.classList.remove("sel"));b.classList.add("sel");L.sel=o;mb.disabled=false;if(e.t===1)speak(o)};
+    box.appendChild(b)});
+  qa.appendChild(box);
+  e.ans=ans;
+}
+function hurt(){
+  L.hearts--;$("hr").textContent="❤️ "+L.hearts;$("qa").classList.add("shake");setTimeout(()=>$("qa").classList.remove("shake"),300);
+  if(L.hearts<=0)setTimeout(()=>fail(),500);
+}
+function finish(good,msg){
+  const f=$("foot"),fb=$("fb");f.className="foot "+(good?"ok":"no");fb.classList.remove("hide");
+  fb.textContent=good?"دروستە! 🎉":"خەلەتە! ڕاستی: "+msg;
+  const mb=$("mainBtn");mb.disabled=false;mb.textContent="بەردەوام بە";mb.className="btn"+(good?"":" r");L.phase="next";L.good=good;
+}
+$("mainBtn").onclick=()=>{
+  const e=L.ex[L.i];
+  if(L.phase==="check"){
+    if(L.sel==null)return;
+    const good=L.sel===e.ans;
+    [...document.querySelectorAll(".opt")].forEach(b=>{b.disabled=true;if(b.textContent===e.ans)b.classList.add("ok");else if(b.classList.contains("sel"))b.classList.add("no")});
+    if(!good)hurt();
+    if(L.hearts<=0&&!good)return;
+    finish(good,e.ans);
+  }else{
+    if(L.good)L.ok++;else L.ex.push(e.t===3?{t:Math.floor(Math.random()*3),w:e.ws[0]}:{...e});
+    L.i++;
+    if(L.good&&L.ok>=L.total)return complete();
+    L.total=Math.max(L.total,L.total);
+    if(L.i>=L.ex.length)return complete();
+    show();
+  }
+};
+function fail(){
+  $("lesson").classList.add("hide");const d=$("done");d.classList.remove("hide");
+  d.innerHTML='<div class="center"><div class="em">💔</div><h2>دلێن تە ب دووماهی هاتن</h2><p style="color:var(--mut)">ئەگەر هەول بدەی دێ باشتر بیت!</p></div><button class="btn r" id="again">هەول بدە دیسا</button><br><button class="btn w" style="color:var(--mut);box-shadow:0 4px 0 var(--bd);background:var(--card)" id="hm">ڤەگەڕە</button>';
+  $("again").onclick=()=>start(L.words,L.unit,L.xp);$("hm").onclick=home;
+}
+function complete(){
+  const t=day();
+  if(S.last!==t){S.streak=(S.last===day(-1))?S.streak+1:1;S.last=t}
+  S.xp+=L.xp;S.today.xp+=L.xp;if(L.unit<0)S.today.daily=true;else S.done[L.unit]=true;
+  save();
+  const acc=Math.round(L.hearts/3*100);
+  $("lesson").classList.add("hide");const d=$("done");d.classList.remove("hide");
+  d.innerHTML='<div class="center"><div class="em">🏆</div><h2>وانە ب دووماهی هات!</h2></div><div class="res"><div>⭐ +'+L.xp+'</div><div>🔥 '+S.streak+'</div><div>❤️ '+L.hearts+'</div></div><button class="btn" id="hm">بەردەوام بە</button>';
+  $("hm").onclick=home;
+}
+const NOFB="Firebase ڕێک نەخستیە. firebaseConfig د فایلێ دا پڕ بکە.";
+window.onUser=u=>{$("lg").textContent=u?"👤 "+(u.displayName||"")+" · دەرکەڤە":"🔐 چوونەژوور ب Google"};
+window.mergeCloud=d=>{if(d&&d.xp>S.xp){S.xp=d.xp;S.streak=d.streak||0;S.last=d.last||"";S.done=d.done||{}}save();home()};
+$("lg").onclick=()=>{if(!window.FB||!FB.ok)return toast(NOFB);FB.user()?FB.logout():FB.login().catch(()=>toast("چوونەژوور سەرنەکەفت"))};
+$("lb").onclick=async()=>{
+  if(!window.FB||!FB.ok)return toast(NOFB);
+  if(!FB.user())return toast("بەری ڤێ، چوونەژوور بکە");
+  $("home").classList.add("hide");const d=$("done");d.classList.remove("hide");d.innerHTML="<h2 style='text-align:center'>🏆 پێشەنگ</h2><div id='lbl'>...</div><br><button class='btn' id='bk'>ڤەگەڕە</button>";
+  $("bk").onclick=home;
+  try{const r=await FB.board();const box=$("lbl");box.textContent="";
+    r.forEach((u,i)=>{const row=document.createElement("div");row.className="row";const a=document.createElement("span");a.textContent=(i+1)+". "+u.name;const b=document.createElement("span");b.textContent="⭐ "+u.xp+"  🔥 "+u.streak;row.append(a,b);box.appendChild(row)})}
+  catch(e){$("lbl").textContent="خەلەتی د خواندنێ دا"}
+};
+home();
+</script>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,doc,getDoc,setDoc,collection,query,orderBy,limit,getDocs} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig={
+  apiKey:"AIzaSyDY0AJhzhE9frKYFuEsSNba_Ii3gBrYCqE",
+  authDomain:"ferboon-d5411.firebaseapp.com",
+  projectId:"ferboon-d5411",
+  storageBucket:"ferboon-d5411.firebasestorage.app",
+  messagingSenderId:"381379291159",
+  appId:"1:381379291159:web:dd1f115163417497f09452"
+};
+
+const ok=true;
+let auth,db,user=null;
+if(ok){const app=initializeApp(firebaseConfig);auth=getAuth(app);db=getFirestore(app)}
+window.FB={
+  ok,
+  user:()=>user,
+  login:()=>signInWithPopup(auth,new GoogleAuthProvider()),
+  logout:()=>signOut(auth),
+  save(S){
+    if(!ok||!user)return;
+    setDoc(doc(db,"users",user.uid),{name:user.displayName||"—",xp:S.xp,streak:S.streak,last:S.last,done:S.done,updated:Date.now()},{merge:true}).catch(()=>{});
+  },
+  async board(){
+    const q=query(collection(db,"users"),orderBy("xp","desc"),limit(10));
+    return (await getDocs(q)).docs.map(d=>d.data());
+  }
+};
+if(ok)onAuthStateChanged(auth,async u=>{
+  user=u;window.onUser&&window.onUser(u);
+  if(u){try{const s=await getDoc(doc(db,"users",u.uid));window.mergeCloud(s.exists()?s.data():null)}catch(e){}}
+});
+</script>
+</body>
+</html>
