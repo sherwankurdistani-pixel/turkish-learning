@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#58cc02">
+<link rel="apple-touch-icon" href="icon-192.png">
 <title>فێربوونا تورکی</title>
 <style>
 :root{--bg:#fff;--card:#fff;--tx:#3c3c3c;--mut:#8a8a8a;--g:#58cc02;--gd:#46a302;--bl:#1cb0f6;--bld:#1899d6;--rd:#ff4b4b;--rdd:#ea2b2b;--or:#ff9600;--bd:#e5e5e5;--gl:#d7ffb8;--rl:#ffdfe0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -295,6 +298,9 @@ if(ok)onAuthStateChanged(auth,async u=>{
   user=u;window.onUser&&window.onUser(u);
   if(u){try{const s=await getDoc(doc(db,"users",u.uid));window.mergeCloud(s.exists()?s.data():null)}catch(e){}}
 });
+</script>
+<script>
+if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 </script>
 </body>
 </html>
